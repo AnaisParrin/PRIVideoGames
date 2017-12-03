@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 
 public class GameController : MonoBehaviour {
-
+/*
     public GameObject[] hazards;
     public Vector3 spawnValues;
     public int hazardCount;
@@ -83,5 +83,5 @@ public class GameController : MonoBehaviour {
     {
         gameOverText.text = "Game Over";
         gameOver = true;//on met le flag a true
-    }
+    }*/
 }

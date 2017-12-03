@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
 
         GetComponent<Rigidbody>().position = new Vector3(
             Mathf.Clamp(GetComponent<Rigidbody>().position.x, boundary.xMin, boundary.xMax),
-            0.0f,
+            -7.0f,
             Mathf.Clamp(GetComponent<Rigidbody>().position.z, boundary.zMin, boundary.zMax)
             ); //pour ne pas quitter l'écran du jeu
 
