@@ -35,13 +35,18 @@ public class DestroyByContact : MonoBehaviour {
 
         }
 
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && !this.CompareTag("ChangeMap"))
         {
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
             //gameController.GameOver();
         }
+        if (other.CompareTag("Player") && this.CompareTag("ChangeMap") && explosion==null)
+        {
+            Destroy(gameObject);
+        }
         //gameController.AddScore(scoreValue);
-        Destroy(other.gameObject);
-        Destroy(gameObject);
+        
     }
 }
