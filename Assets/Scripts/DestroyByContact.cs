@@ -9,6 +9,9 @@ public class DestroyByContact : MonoBehaviour {
     public GameObject playerExplosion;
 
     private GameController gameController;
+
+    public AudioClip playerOKSound;
+
     void Start()
     {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -21,6 +24,7 @@ public class DestroyByContact : MonoBehaviour {
             Debug.Log("Cannot find 'GameController' script");
         }
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Boundary") || other.CompareTag("Enemy"))
@@ -43,6 +47,7 @@ public class DestroyByContact : MonoBehaviour {
         }
         if (other.CompareTag("Player") && this.CompareTag("ChangeMap") && explosion==null)
         {
+            AudioSource.PlayClipAtPoint(playerOKSound, transform.position);
             Destroy(gameObject);
             gameController.WaveEnd();
         }

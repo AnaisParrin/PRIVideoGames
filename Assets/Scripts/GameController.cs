@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
     // Zone de terrain : x = [4, -4], y = -7, z = [2.5, 12]
 
     public GameObject shot;
+    public GameObject back;
 
     public double startWait;
     public double btwShotsWait;
@@ -42,8 +43,9 @@ public class GameController : MonoBehaviour {
         {
             Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2.5f, 12f));
 
-            Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
-            yield return new WaitForSeconds((float)btwShotsWait);
+            shot = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
+            shot.GetComponent<Mover>().a = 1;
+            shot.GetComponent<Mover>().b = 3;
 
             yield return new WaitForSeconds((float)btwShotsWait);
 
