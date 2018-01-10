@@ -16,8 +16,13 @@ public class GameController : MonoBehaviour {
 
     public GUIText restartText; //display du restart
     public GUIText gameOverText; // display du Game Over
+    public Material background;
+
     private bool gameOver;
     private bool restart;
+    private bool wave_end; // savoir si on a fini une wave d'ennemis pour faire un fondu noir
+    private bool fondu; //savoir si on fait un fondu noir/blanc ou blanc/noir
+
 
     void Start()
     {
@@ -25,6 +30,8 @@ public class GameController : MonoBehaviour {
         restartText.text = "";
         gameOver = false;
         gameOverText.text = "";
+        wave_end = false;
+        fondu = false;
 
         StartCoroutine(Shooting());
     }
@@ -34,18 +41,23 @@ public class GameController : MonoBehaviour {
         while (!gameOver)
         {
             Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2.5f, 12f));
-            Quaternion shotRotation = Quaternion.identity;
 
-            Instantiate(shot, shotPosition, shotRotation);//on fait apparaitre notre astéroid
+            Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
             yield return new WaitForSeconds((float)btwShotsWait);
 
             yield return new WaitForSeconds((float)btwShotsWait);
+
         }
-
+        
         if (gameOver)
         {
             restart = true;//on met le flag a true pour indiquer qu'on peut faire un restart
             restartText.text = "Press 'R' for Restart";
+        }
+        else
+        {
+            wave_end = true;//on va faire un fondu car on a fini une vague d'ennemis
+            gameOverText.text = "Placer vous sur la lumiere :)";
         }
     }
 
@@ -59,14 +71,32 @@ public class GameController : MonoBehaviour {
             }
         }
     }
-
     public void GameOver()
     {
         gameOverText.text = "Game Over";
         gameOver = true;//on met le flag a true
     }
-
-
+    public void WaveEnd()//lorsqu'on a touche la bouboule violette et qu'on est pret a affronter la 2è vague
+    {
+        gameOverText.text = "";
+        fondu = true;
+    }
+    public bool getWave_end()
+    {
+        return wave_end;
+    }
+    public void setWave_end(bool b)
+    {
+        wave_end = b;
+    }
+    public bool getFondu()
+    {
+        return fondu;
+    }
+    public void setFondu(bool b)
+    {
+        fondu = b;
+    }
 
 /*
     public GameObject[] hazards;

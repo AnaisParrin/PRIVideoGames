@@ -7,7 +7,6 @@ public class DestroyByContact : MonoBehaviour {
 
     public GameObject explosion;
     public GameObject playerExplosion;
-    public int scoreValue; // on définit coté Unity combien vaut la destruction d'un ennemi
 
     private GameController gameController;
     void Start()
@@ -45,8 +44,9 @@ public class DestroyByContact : MonoBehaviour {
         if (other.CompareTag("Player") && this.CompareTag("ChangeMap") && explosion==null)
         {
             Destroy(gameObject);
+            gameController.WaveEnd();
         }
-        //gameController.AddScore(scoreValue);
+        
         
     }
 }
