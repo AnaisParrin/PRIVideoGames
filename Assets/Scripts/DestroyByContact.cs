@@ -40,7 +40,7 @@ public class DestroyByContact : MonoBehaviour {
             Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
             Destroy(other.gameObject);
             Destroy(gameObject);
-            //gameController.GameOver();
+            gameController.GameOver();
         }
         if (other.CompareTag("Player") && this.CompareTag("ChangeMap") && explosion==null)
         {

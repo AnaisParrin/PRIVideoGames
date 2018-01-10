@@ -5,6 +5,69 @@ using UnityEngine.SceneManagement;
 
 
 public class GameController : MonoBehaviour {
+
+    // y = -7
+    // Zone de terrain : x = [4, -4], y = -7, z = [2.5, 12]
+
+    public GameObject shot;
+
+    public double startWait;
+    public double btwShotsWait;
+
+    public GUIText restartText; //display du restart
+    public GUIText gameOverText; // display du Game Over
+    private bool gameOver;
+    private bool restart;
+
+    void Start()
+    {
+        restart = false;
+        restartText.text = "";
+        gameOver = false;
+        gameOverText.text = "";
+
+        StartCoroutine(Shooting());
+    }
+
+    IEnumerator Shooting(){
+        yield return new WaitForSeconds((float)startWait);
+        while (!gameOver)
+        {
+            Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2.5f, 12f));
+            Quaternion shotRotation = Quaternion.identity;
+
+            Instantiate(shot, shotPosition, shotRotation);//on fait apparaitre notre astéroid
+            yield return new WaitForSeconds((float)btwShotsWait);
+
+            yield return new WaitForSeconds((float)btwShotsWait);
+        }
+
+        if (gameOver)
+        {
+            restart = true;//on met le flag a true pour indiquer qu'on peut faire un restart
+            restartText.text = "Press 'R' for Restart";
+        }
+    }
+
+    void Update()
+    {
+        if (restart)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+    }
+
+    public void GameOver()
+    {
+        gameOverText.text = "Game Over";
+        gameOver = true;//on met le flag a true
+    }
+
+
+
 /*
     public GameObject[] hazards;
     public Vector3 spawnValues;
