@@ -48,7 +48,7 @@ public class Opacity_Change : MonoBehaviour {
             }
             else
             {
-                GC.setFondu(false);//on a fini de remettre l'écran a la normale
+                //GC.setFondu(false);//on a fini de remettre l'écran a la normale
                 i = 0;
             }
             

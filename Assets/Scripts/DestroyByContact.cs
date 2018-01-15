@@ -29,6 +29,7 @@ public class DestroyByContact : MonoBehaviour {
     {
         if (other.CompareTag("Boundary") || other.CompareTag("Enemy"))
         {
+            gameController.setEnnemyOnPlay(gameController.getEnnemyOnPlay()-1);
             return;
         }
 

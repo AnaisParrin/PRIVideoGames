@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
     // Zone de terrain : x = [4, -4], y = -7, z = [2, 12.2]
 
     public GameObject shot;
-    //private GameObject[] shots; //tableau de shots pour voir si tous les shots ont bien disparu avant de mettre la boule violette pour changer de map
+    private List<GameObject> shots; //tableau de shots pour voir si tous les shots ont bien disparu avant de mettre la boule violette pour changer de map
     public GameObject changeMap;
 
     public double startWait;
@@ -25,13 +25,13 @@ public class GameController : MonoBehaviour {
     private bool wave_end; // savoir si on a fini une wave d'ennemis pour faire un fondu noir
     private bool fondu; //savoir si on fait un fondu noir/blanc ou blanc/noir
 
-
     public int nb_enemy;
     private int i;
+    private int ennemyOnPlay;
+    private int test;
 
     void Start()
     {
-        
         restart = false;
         restartText.text = "";
         gameOver = false;
@@ -39,21 +39,28 @@ public class GameController : MonoBehaviour {
         wave_end = false;
         fondu = false;
 
-        i=0;
+        test=0;
+
+        i = 0;
+        shots = new List<GameObject>();
+        ennemyOnPlay = 0;
 
         StartCoroutine(Shooting());
     }
 
-    IEnumerator Shooting(){
+    IEnumerator Shooting()
+    {
+
+        GameObject shotty;
+
         yield return new WaitForSeconds((float)startWait);
         while (!gameOver && i!=nb_enemy)
         {
             Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2f, 12.2f));
 
-            shot = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
-            shot.GetComponent<Mover>().a = 1;
-            shot.GetComponent<Mover>().b = 3;
-
+            shotty = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
+            shots.Add(shotty);
+            ennemyOnPlay++;
             i++;
 
             yield return new WaitForSeconds((float)btwShotsWait);
@@ -73,8 +80,29 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        print(shots.Count);
+        for (int ii = 0; ii < shots.Count; ii++)
+        {
+            if (shots[ii] != null)
+            {
+                shots[ii].transform.position = new Vector3(shots[ii].transform.position.x + 1, -7, shots[ii].transform.position.z + 1);
+
+            }
+        }
+
+        print(fondu);
+
+        if(fondu)
+        {
+            i = 0;
+            shots = new List<GameObject>();
+            ennemyOnPlay = 0;
+            fondu = false;
+            StartCoroutine(Shooting());
+        }
+
         if (restart)
         {
             if (Input.GetKeyDown(KeyCode.R))
@@ -110,6 +138,14 @@ public class GameController : MonoBehaviour {
         fondu = b;
     }
 
+    public int getEnnemyOnPlay()
+    {
+        return ennemyOnPlay;
+    }
+    public void setEnnemyOnPlay(int b)
+    {
+        ennemyOnPlay = b;
+    }
 /*
     public GameObject[] hazards;
     public Vector3 spawnValues;
