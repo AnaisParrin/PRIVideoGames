@@ -5,7 +5,7 @@ using UnityEngine;
 public class Opacity_Change : MonoBehaviour {
 
     private GameController GC;
-    private int i;
+    private int i; // existe parce que sinon le programme fait un fondu que sur une partie du background
 	// Use this for initialization
 	void Start () {
         
@@ -27,6 +27,7 @@ public class Opacity_Change : MonoBehaviour {
 		if(GC.getWave_end())//si on a fini la vague d'ennemis
         {
             StartCoroutine(FadeTo(0.0f, 15.0f));
+            //afin de prends en compte les 2 parties du background qui bouge
             if(i<1)
             {
                 i++;
@@ -38,7 +39,7 @@ public class Opacity_Change : MonoBehaviour {
             }
             
         }
-        if(GC.getFondu())//lorsqu'on a recup la bouboule !
+        if(GC.getFondu())//lorsqu'on a recup la boule violette !
         {
             StartCoroutine(FadeTo(1.0f, 15.0f));
             if (i < 1)

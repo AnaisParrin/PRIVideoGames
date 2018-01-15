@@ -7,10 +7,11 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour {
 
     // y = -7
-    // Zone de terrain : x = [4, -4], y = -7, z = [2.5, 12]
+    // Zone de terrain : x = [4, -4], y = -7, z = [2, 12.2]
 
     public GameObject shot;
-    public GameObject back;
+    //private GameObject[] shots; //tableau de shots pour voir si tous les shots ont bien disparu avant de mettre la boule violette pour changer de map
+    public GameObject changeMap;
 
     public double startWait;
     public double btwShotsWait;
@@ -25,8 +26,12 @@ public class GameController : MonoBehaviour {
     private bool fondu; //savoir si on fait un fondu noir/blanc ou blanc/noir
 
 
+    public int nb_enemy;
+    private int i;
+
     void Start()
     {
+        
         restart = false;
         restartText.text = "";
         gameOver = false;
@@ -34,18 +39,22 @@ public class GameController : MonoBehaviour {
         wave_end = false;
         fondu = false;
 
+        i=0;
+
         StartCoroutine(Shooting());
     }
 
     IEnumerator Shooting(){
         yield return new WaitForSeconds((float)startWait);
-        while (!gameOver)
+        while (!gameOver && i!=nb_enemy)
         {
-            Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2.5f, 12f));
+            Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2f, 12.2f));
 
             shot = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
             shot.GetComponent<Mover>().a = 1;
             shot.GetComponent<Mover>().b = 3;
+
+            i++;
 
             yield return new WaitForSeconds((float)btwShotsWait);
 
@@ -59,6 +68,7 @@ public class GameController : MonoBehaviour {
         else
         {
             wave_end = true;//on va faire un fondu car on a fini une vague d'ennemis
+            Instantiate(changeMap,new Vector3(Random.Range(3f, -3f), -7, Random.Range(4f, 10f)),Quaternion.identity);
             gameOverText.text = "Placer vous sur la lumiere :)";
         }
     }
