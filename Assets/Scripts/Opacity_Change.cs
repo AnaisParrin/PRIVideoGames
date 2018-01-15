@@ -8,7 +8,7 @@ public class Opacity_Change : MonoBehaviour {
     private int i; // existe parce que sinon le programme fait un fondu que sur une partie du background
 	// Use this for initialization
 	void Start () {
-        
+
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
         if (gameControllerObject != null)
         {
@@ -18,15 +18,15 @@ public class Opacity_Change : MonoBehaviour {
         {
             Debug.Log("Cannot find 'GameController' script");
         }
-
         i = 0;
+
 	}
 	// Update is called once per frame
     void Update()
     {
 		if(GC.getWave_end())//si on a fini la vague d'ennemis
         {
-            StartCoroutine(FadeTo(0.0f, 15.0f));
+            StartCoroutine(FadeTo(0.0f, 3.0f));
             //afin de prends en compte les 2 parties du background qui bouge
             if(i<1)
             {
@@ -37,11 +37,11 @@ public class Opacity_Change : MonoBehaviour {
                 GC.setWave_end(false);//on a fini le fondu
                 i = 0;
             }
-            
+           
         }
         if(GC.getFondu())//lorsqu'on a recup la boule violette !
         {
-            StartCoroutine(FadeTo(1.0f, 15.0f));
+            StartCoroutine(FadeTo(1.0f, 3.0f));
             if (i < 1)
             {
                 i++;
