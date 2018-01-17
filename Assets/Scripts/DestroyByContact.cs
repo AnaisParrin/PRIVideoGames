@@ -29,6 +29,8 @@ public class DestroyByContact : MonoBehaviour {
     {
         if (other.CompareTag("Boundary") || other.CompareTag("Enemy"))
         {
+            // METTRE CA POUR QUE CA SE SUPPRIME QUAND SORT DU TERRAIN ! 
+            gameController.destroyOneShot();
             return;
         }
 

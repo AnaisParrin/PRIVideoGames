@@ -26,9 +26,10 @@ public class GameController : MonoBehaviour {
 
     public int nb_enemy;
     private int i;
-    private bool ennemyOnPlay;
     private int indexFrame;
     private ReadTxt r;
+
+    private GameObject shotty;
 
     void Start()
     {
@@ -41,7 +42,6 @@ public class GameController : MonoBehaviour {
 
         i = 0;
         shots = new List<GameObject>();
-        ennemyOnPlay = false;
         r = new ReadTxt();
 
         StartCoroutine(Shooting());
@@ -49,23 +49,44 @@ public class GameController : MonoBehaviour {
 
     IEnumerator Shooting()
     {
-        GameObject shotty;
-
         indexFrame = 0;
         r.GetPosition(indexFrame);
         yield return new WaitForSeconds((float)startWait);
 
-        while (!gameOver && i!=(r.getCoordX().Count))
+        while (i!=(r.getCoordX().Count))
         {
             Vector3 shotPosition = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
 
             shotty = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
             shots.Add(shotty);
             i++;
-
-            //yield return new WaitForSeconds((float)btwShotsWait);
         }
-        ennemyOnPlay = true;
+
+        while(!gameOver && r.getNbFrame()!=indexFrame)
+        {
+            int ii;
+            for (ii = 0; ii < Mathf.Min(shots.Count, r.getCoordX().Count); ii++)
+            {
+                shots[ii].transform.position = new Vector3((float)(-6 + r.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + r.getCoordZ()[ii] * (12.0 / 20.0)));
+            }
+            while (shots.Count < r.getCoordX().Count)
+            {
+                shots.Add(Instantiate(shot, new Vector3((float)(-6 + (r.getCoordX()[ii] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[ii] * (12.0 / 20.0)))), Quaternion.identity));
+                ii++;
+            }
+            while (shots.Count > r.getCoordX().Count)
+            {
+                destroyOneShot();
+            }
+            indexFrame++;
+
+            if (indexFrame <= (r.getNbFrame() - 1))
+            {
+                r.GetPosition(indexFrame);
+            }
+            yield return new WaitForSeconds(0.004f);
+        }
+
         if (gameOver)
         {
             restart = true;//on met le flag a true pour indiquer qu'on peut faire un restart
@@ -73,6 +94,11 @@ public class GameController : MonoBehaviour {
         }
         else
         {
+            for (int j = 0; j < shots.Count; j++)
+            {
+                Destroy(shots[j]);
+            }
+            shots.Clear();
             wave_end = true;//on va faire un fondu car on a fini une vague d'ennemis
             Instantiate(changeMap,new Vector3(Random.Range(3f, -3f), -7, Random.Range(4f, 10f)),Quaternion.identity);
             gameOverText.text = "Placer vous sur la lumiere :)";
@@ -81,29 +107,10 @@ public class GameController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if(ennemyOnPlay)
-        {
-            for (int ii = 0; ii < Mathf.Min(shots.Count, r.getCoordX().Count); ii++)
-            {
-                shots[ii].transform.position = new Vector3((float)(-6 + r.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + r.getCoordZ()[ii] * (12.0 / 20.0)));
-            }
-            indexFrame++;
-        }
-
-
-
-
-        if (indexFrame <= (r.getNbFrame()-1))
-        {
-            r.GetPosition(indexFrame);
-        }
-        
-
         if(fondu)
         {
             i = 0;
             shots = new List<GameObject>();
-            ennemyOnPlay = false;
             fondu = false;
             StartCoroutine(Shooting());
         }
@@ -141,5 +148,12 @@ public class GameController : MonoBehaviour {
     public void setFondu(bool b)
     {
         fondu = b;
+    }
+
+    public void destroyOneShot()
+    {
+        shotty = shots[shots.Count - 1];
+        shots.RemoveAt(shots.Count - 1);
+        Destroy(shotty);
     }
 }
