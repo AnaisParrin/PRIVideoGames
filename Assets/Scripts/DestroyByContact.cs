@@ -29,14 +29,12 @@ public class DestroyByContact : MonoBehaviour {
     {
         if (other.CompareTag("Boundary") || other.CompareTag("Enemy"))
         {
-            gameController.setEnnemyOnPlay(gameController.getEnnemyOnPlay()-1);
             return;
         }
 
-        if(explosion!=null)
+        if (explosion != null && !(this.CompareTag("Enemy") && other.CompareTag("ChangeMap")))
         {
             Instantiate(explosion, transform.position, transform.rotation);
-
         }
 
         if(other.CompareTag("Player") && !this.CompareTag("ChangeMap"))
@@ -52,7 +50,7 @@ public class DestroyByContact : MonoBehaviour {
             Destroy(gameObject);
             gameController.WaveEnd();
         }
-        
+
         
     }
 }

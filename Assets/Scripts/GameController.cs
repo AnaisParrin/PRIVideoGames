@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class GameController : MonoBehaviour {
 
     // y = -7
@@ -27,8 +26,9 @@ public class GameController : MonoBehaviour {
 
     public int nb_enemy;
     private int i;
-    private int ennemyOnPlay;
-    private int test;
+    private bool ennemyOnPlay;
+    private int indexFrame;
+    private ReadTxt r;
 
     void Start()
     {
@@ -39,34 +39,33 @@ public class GameController : MonoBehaviour {
         wave_end = false;
         fondu = false;
 
-        test=0;
-
         i = 0;
         shots = new List<GameObject>();
-        ennemyOnPlay = 0;
+        ennemyOnPlay = false;
+        r = new ReadTxt();
 
         StartCoroutine(Shooting());
     }
 
     IEnumerator Shooting()
     {
-
         GameObject shotty;
 
+        indexFrame = 0;
+        r.GetPosition(indexFrame);
         yield return new WaitForSeconds((float)startWait);
-        while (!gameOver && i!=nb_enemy)
+
+        while (!gameOver && i!=(r.getCoordX().Count))
         {
-            Vector3 shotPosition = new Vector3(Random.Range(4f, -4f), -7, Random.Range(2f, 12.2f));
+            Vector3 shotPosition = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
 
             shotty = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
             shots.Add(shotty);
-            ennemyOnPlay++;
             i++;
 
-            yield return new WaitForSeconds((float)btwShotsWait);
-
+            //yield return new WaitForSeconds((float)btwShotsWait);
         }
-        
+        ennemyOnPlay = true;
         if (gameOver)
         {
             restart = true;//on met le flag a true pour indiquer qu'on peut faire un restart
@@ -82,23 +81,29 @@ public class GameController : MonoBehaviour {
 
     void FixedUpdate()
     {
-        print(shots.Count);
-        for (int ii = 0; ii < shots.Count; ii++)
+        if(ennemyOnPlay)
         {
-            if (shots[ii] != null)
+            for (int ii = 0; ii < Mathf.Min(shots.Count, r.getCoordX().Count); ii++)
             {
-                shots[ii].transform.position = new Vector3(shots[ii].transform.position.x + 1, -7, shots[ii].transform.position.z + 1);
-
+                shots[ii].transform.position = new Vector3((float)(-6 + r.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + r.getCoordZ()[ii] * (12.0 / 20.0)));
             }
+            indexFrame++;
         }
 
-        print(fondu);
+
+
+
+        if (indexFrame <= (r.getNbFrame()-1))
+        {
+            r.GetPosition(indexFrame);
+        }
+        
 
         if(fondu)
         {
             i = 0;
             shots = new List<GameObject>();
-            ennemyOnPlay = 0;
+            ennemyOnPlay = false;
             fondu = false;
             StartCoroutine(Shooting());
         }
@@ -137,92 +142,4 @@ public class GameController : MonoBehaviour {
     {
         fondu = b;
     }
-
-    public int getEnnemyOnPlay()
-    {
-        return ennemyOnPlay;
-    }
-    public void setEnnemyOnPlay(int b)
-    {
-        ennemyOnPlay = b;
-    }
-/*
-    public GameObject[] hazards;
-    public Vector3 spawnValues;
-    public int hazardCount;
-    public double spawnWait;//temps d'attente entre chaque vague d'ennemis
-    public double startWait;//temps d'attente avant nouvelle vague
-    public double waveWait;//temps d'attente avant de démarrer la nouvelle vague
-
-    public GUIText scoreText; // display du score
-    public GUIText restartText; //display du restart
-    public GUIText gameOverText; // display du Game Over
-    public int score;
-
-    private bool gameOver;
-    private bool restart;
-    
-    void Start()
-    {
-        score = 0;//on initialise le score
-        restart = false;
-        restartText.text = "";
-        gameOver = false;
-        gameOverText.text = "";
-
-        UpdateScore(); //on update le GUI text en fonction du score, on le met a 0 ici
-        StartCoroutine(SpawnWaves());// on lance une coroutine => on va lancer une vague d'ennemie
-        //puis comme c'est dans une boucle on va lancer plusieurs vagues
-    }
-
-    void Update()
-    {
-        if (restart)
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-        }
-    }
-    IEnumerator SpawnWaves()
-    {
-          
-        yield return new WaitForSeconds((float)startWait);//on attend avant de démarrer
-        while(true)
-        {
-            for(int i = 0; i < hazardCount; i++)
-            {
-                GameObject hazard = hazards[Random.Range(0, hazards.Length)];
-                Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
-                Quaternion spawnRotation = Quaternion.identity;
-                Instantiate(hazard, spawnPosition, spawnRotation);//on fait apparaitre notre astéroid
-                yield return new WaitForSeconds((float)spawnWait);//on attend un peu entre chaque astéroid
-            }
-            yield return new WaitForSeconds((float)waveWait);//on attend un peu entre chaque vague d'ennemis
-
-
-            if(gameOver)
-            {
-                restart = true;//on met le flag a true pour indiquer qu'on peut faire un restart
-                restartText.text = "Press 'R' for Restart";
-                break;//ca va briser la coroutine
-            }
-        }
-    }
-    public void AddScore(int newScoreValue) //on ajoute la valeur rentrée pour mettre a jour le score
-    {
-        score += newScoreValue;
-        UpdateScore();
-    }
-    void UpdateScore()//mettre a jour le score dans le GUIText
-    {
-        scoreText.text = "Score: " + score;
-    }
-
-    public void GameOver()
-    {
-        gameOverText.text = "Game Over";
-        gameOver = true;//on met le flag a true
-    }*/
 }
