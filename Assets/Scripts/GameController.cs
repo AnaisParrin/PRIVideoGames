@@ -27,7 +27,8 @@ public class GameController : MonoBehaviour {
     public int nb_enemy;
     private int i;
     private int indexFrame;
-    private ReadTxt r;
+    //private ReadTxt r;
+    private ReadMatrix m;
 
     private GameObject shotty;
 
@@ -42,7 +43,9 @@ public class GameController : MonoBehaviour {
 
         i = 0;
         shots = new List<GameObject>();
-        r = new ReadTxt();
+        //r = new ReadTxt();
+
+        m = new ReadMatrix();
 
         StartCoroutine(Shooting());
     }
@@ -50,39 +53,40 @@ public class GameController : MonoBehaviour {
     IEnumerator Shooting()
     {
         indexFrame = 0;
-        r.GetPosition(indexFrame);
+        //r.GetPosition(indexFrame);
+        m.getPosition(indexFrame);
         yield return new WaitForSeconds((float)startWait);
 
-        while (i!=(r.getCoordX().Count))
+        while (i!=(m.getCoordX().Count))
         {
-            Vector3 shotPosition = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
+            Vector3 shotPosition = new Vector3((float)(-6 + (m.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (m.getCoordZ()[0] * (12.0 / 20.0))));
 
             shotty = Instantiate(shot, shotPosition, Quaternion.identity);//on fait apparaitre notre astéroid
             shots.Add(shotty);
             i++;
         }
 
-        while(!gameOver && r.getNbFrame()!=indexFrame)
+        while(!gameOver && m.getNbFrame()!=indexFrame)
         {
             int ii;
-            for (ii = 0; ii < Mathf.Min(shots.Count, r.getCoordX().Count); ii++)
+            for (ii = 0; ii < Mathf.Min(shots.Count, m.getCoordX().Count); ii++)
             {
-                shots[ii].transform.position = new Vector3((float)(-6 + r.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + r.getCoordZ()[ii] * (12.0 / 20.0)));
+                shots[ii].transform.position = new Vector3((float)(-6 + m.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + m.getCoordZ()[ii] * (12.0 / 20.0)));
             }
-            while (shots.Count < r.getCoordX().Count)
+            while (shots.Count < m.getCoordX().Count)
             {
-                shots.Add(Instantiate(shot, new Vector3((float)(-6 + (r.getCoordX()[ii] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[ii] * (12.0 / 20.0)))), Quaternion.identity));
+                shots.Add(Instantiate(shot, new Vector3((float)(-6 + (m.getCoordX()[ii] * (12.0 / 20.0))), -7, (float)(1 + (m.getCoordZ()[ii] * (12.0 / 20.0)))), Quaternion.identity));
                 ii++;
             }
-            while (shots.Count > r.getCoordX().Count)
+            while (shots.Count > m.getCoordX().Count)
             {
                 destroyOneShot();
             }
             indexFrame++;
 
-            if (indexFrame <= (r.getNbFrame() - 1))
+            if (indexFrame <= (m.getNbFrame() - 1))
             {
-                r.GetPosition(indexFrame);
+                m.getPosition(indexFrame);
             }
             yield return new WaitForSeconds(0.004f);
         }
