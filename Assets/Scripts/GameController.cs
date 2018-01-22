@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour {
     private bool wave_end; // savoir si on a fini une wave d'ennemis pour faire un fondu noir
     private bool fondu; //savoir si on fait un fondu noir/blanc ou blanc/noir
 
+
     public int nb_enemy;
     private int i;
     private int indexFrame;
@@ -46,6 +47,8 @@ public class GameController : MonoBehaviour {
         //r = new ReadTxt();
 
         m = new ReadMatrix();
+
+        GameObject.FindWithTag("Player").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
 
         StartCoroutine(Shooting());
     }
@@ -88,7 +91,7 @@ public class GameController : MonoBehaviour {
             {
                 m.getPosition(indexFrame);
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.004f);
         }
 
         if (gameOver)
