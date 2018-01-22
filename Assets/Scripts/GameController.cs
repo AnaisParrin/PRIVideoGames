@@ -91,7 +91,7 @@ public class GameController : MonoBehaviour {
             {
                 m.getPosition(indexFrame);
             }
-            yield return new WaitForSeconds(0.004f);
+            yield return new WaitForSeconds(1f);
         }
 
         if (gameOver)
