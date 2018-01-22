@@ -6,6 +6,9 @@ public class DestroyByBoundary : MonoBehaviour {
 
     void OnTriggerExit(Collider other)
     {
-        Destroy(other.gameObject);//l'objet se détruit s'il sort du Boundary, donc s'il sort de la zone de jeu
+        if (!other.CompareTag("Enemy"))
+        {
+            Destroy(other.gameObject);//l'objet se détruit s'il sort du Boundary, donc s'il sort de la zone de jeu
+        }
     }
 }

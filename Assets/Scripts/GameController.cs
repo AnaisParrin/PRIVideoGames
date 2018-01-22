@@ -88,7 +88,7 @@ public class GameController : MonoBehaviour {
             {
                 m.getPosition(indexFrame);
             }
-            yield return new WaitForSeconds(0.004f);
+            yield return new WaitForSeconds(1f);
         }
 
         if (gameOver)
@@ -104,7 +104,7 @@ public class GameController : MonoBehaviour {
             }
             shots.Clear();
             wave_end = true;//on va faire un fondu car on a fini une vague d'ennemis
-            Instantiate(changeMap,new Vector3(Random.Range(3f, -3f), -7, Random.Range(4f, 10f)),Quaternion.identity);
+            Instantiate(changeMap, new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0)))), Quaternion.identity);
             gameOverText.text = "Placer vous sur la lumiere :)";
         }
     }
