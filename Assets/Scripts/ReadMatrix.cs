@@ -13,7 +13,7 @@ public class ReadMatrix : MonoBehaviour
 
     public ReadMatrix()
     {
-        string fileName = "testC.txt";
+        string fileName = "TirSimpleUni/1TirCC.txt";
 
         string[] contentFile = File.ReadAllLines(fileName);
         string[] infoMatrix = contentFile[0].Split(' ');
@@ -74,5 +74,10 @@ public class ReadMatrix : MonoBehaviour
     public int getNbFrame()
     {
         return nbFrame;
+    }
+
+    public Vector3 getPlayerPositionInit()
+    {
+        return playerPositionInit;
     }
 }
