@@ -15,7 +15,7 @@ public class ReadTxt //:MonoBehaviour
     public ReadTxt()
 	{
 
-        string fileName = "testRandom90.txt";
+        string fileName = "TirSimpleUni/1TirSoluce.txt";
         ListFrame = File.ReadAllLines(fileName);
         
         //ListPoint = ListFrame[4].Split('-');

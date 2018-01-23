@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
     public GameObject shot;
     private List<GameObject> shots; //tableau de shots pour voir si tous les shots ont bien disparu avant de mettre la boule violette pour changer de map
     public GameObject changeMap;
+    private GameObject walkThrough;
 
     public double startWait;
     public double btwShotsWait;
@@ -28,7 +29,7 @@ public class GameController : MonoBehaviour {
     public int nb_enemy;
     private int i;
     private int indexFrame;
-    //private ReadTxt r;
+    private ReadTxt r;
     private ReadMatrix m;
 
     private GameObject shotty;
@@ -44,11 +45,13 @@ public class GameController : MonoBehaviour {
 
         i = 0;
         shots = new List<GameObject>();
-        //r = new ReadTxt();
+        r = new ReadTxt();
 
         m = new ReadMatrix();
 
         GameObject.FindWithTag("Player").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
+        //GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
+        
 
         StartCoroutine(Shooting());
     }
@@ -56,7 +59,7 @@ public class GameController : MonoBehaviour {
     IEnumerator Shooting()
     {
         indexFrame = 0;
-        //r.GetPosition(indexFrame);
+        r.GetPosition(indexFrame);
         m.getPosition(indexFrame);
         yield return new WaitForSeconds((float)startWait);
 
@@ -85,12 +88,17 @@ public class GameController : MonoBehaviour {
             {
                 destroyOneShot();
             }
+
+            //GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
+            
             indexFrame++;
 
             if (indexFrame <= (m.getNbFrame() - 1))
             {
                 m.getPosition(indexFrame);
+                r.GetPosition(indexFrame);
             }
+
             yield return new WaitForSeconds(1f);
         }
 
