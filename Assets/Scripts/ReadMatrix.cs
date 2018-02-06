@@ -13,7 +13,8 @@ public class ReadMatrix : MonoBehaviour
 
     public ReadMatrix()
     {
-        string fileName = "TirSimpleUni/50TirCC.txt";
+        string fileName = "Patterns/DifficileC.txt"; //62
+        //string fileName = "Patterns/pattern99C.txt";
 
         string[] contentFile = File.ReadAllLines(fileName);
         string[] infoMatrix = contentFile[0].Split(' ');

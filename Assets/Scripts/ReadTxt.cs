@@ -15,7 +15,8 @@ public class ReadTxt //:MonoBehaviour
     public ReadTxt()
 	{
 
-        string fileName = "TirSimpleUni/1TirSoluce.txt";
+        string fileName = "Patterns/DifficileS.txt"; //62
+        //string fileName = "Patterns/pattern99S.txt";
         ListFrame = File.ReadAllLines(fileName);
         
         //ListPoint = ListFrame[4].Split('-');
@@ -31,7 +32,8 @@ public class ReadTxt //:MonoBehaviour
     {
         CoordX = new List<float>();
         CoordZ = new List<float>();
-        ListPoint = ListFrame[index + 3].Split('-');
+        //ListPoint = ListFrame[index + 3].Split('-');
+        ListPoint = ListFrame[index].Split('-');
         for (int i = 0; i < ListPoint.Length - 1; i++)
         {
             OnePoint = ListPoint[i].Split(' ');

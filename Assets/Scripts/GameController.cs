@@ -31,8 +31,9 @@ public class GameController : MonoBehaviour {
     private int indexFrame;
     private ReadTxt r;
     private ReadMatrix m;
-
     private GameObject shotty;
+
+    private float elapsedTime;
 
     void Start()
     {
@@ -42,6 +43,7 @@ public class GameController : MonoBehaviour {
         gameOverText.text = "";
         wave_end = false;
         fondu = false;
+        elapsedTime = 0;
 
         i = 0;
         shots = new List<GameObject>();
@@ -49,8 +51,8 @@ public class GameController : MonoBehaviour {
 
         m = new ReadMatrix();
 
-        GameObject.FindWithTag("Player").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
-        //GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
+        //GameObject.FindWithTag("Player").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
+        GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (m.getPlayerPositionInit().x * (12.0 / 20.0))), m.getPlayerPositionInit().y, (float)(1 + (m.getPlayerPositionInit().z * (12.0 / 20.0))));
         
 
         StartCoroutine(Shooting());
@@ -77,7 +79,8 @@ public class GameController : MonoBehaviour {
             int ii;
             for (ii = 0; ii < Mathf.Min(shots.Count, m.getCoordX().Count); ii++)
             {
-                shots[ii].transform.position = new Vector3((float)(-6 + m.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + m.getCoordZ()[ii] * (12.0 / 20.0)));
+                shots[ii].transform.position = Vector3.Lerp(shots[ii].transform.position, new Vector3((float)(-6 + m.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + m.getCoordZ()[ii] * (12.0 / 20.0))), Time.time * 0.5f);
+                //shots[ii].transform.position = new Vector3((float)(-6 + m.getCoordX()[ii] * (12.0 / 20.0)), -7, (float)(1 + m.getCoordZ()[ii] * (12.0 / 20.0)));
             }
             while (shots.Count < m.getCoordX().Count)
             {
@@ -89,7 +92,8 @@ public class GameController : MonoBehaviour {
                 destroyOneShot();
             }
 
-            //GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
+////////////////
+            GameObject.FindWithTag("Soluce").transform.position = new Vector3((float)(-6 + (r.getCoordX()[0] * (12.0 / 20.0))), -7, (float)(1 + (r.getCoordZ()[0] * (12.0 / 20.0))));
             
             indexFrame++;
 
